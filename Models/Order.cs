@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ConsoleApp1.Enums;
 using ConsoleApp1.Models;
 using ConsoleApp1.Services;
 
@@ -19,6 +20,10 @@ public class Order : SerializableObject<Order>
     private Payment _payment; 
 
     public int TotalItems => OrderDishes.Sum(orderDish => orderDish.Quantity);  
+    
+    private readonly List<Payment> _payments = new List<Payment>();
+    public IReadOnlyList<Payment> Payments => _payments.AsReadOnly();
+
     
     public void SetCustomer(Customer customer)
     {
@@ -48,7 +53,32 @@ public class Order : SerializableObject<Order>
             Console.WriteLine($"Dish '{dish.Name}' (Quantity: {quantity}) added to Order {IdOrder}. Current total: {TotalAmount:C}");
         }
     }
-    
+    public void AddPayment(decimal amount, PaymentMethod method)
+    {
+        if (amount <= 0) throw new ArgumentException("Amount must be greater than zero.", nameof(amount));
+
+        var payment = new Payment
+        {
+            IdPayment = _payments.Count + 1,
+            Amount = amount,
+            Method = method,
+            _order = this 
+        };
+
+        _payments.Add(payment);
+        Console.WriteLine($"Payment {payment.IdPayment} added to Order {IdOrder}.");
+    }
+
+    public void RemovePayment(int paymentId)
+    {
+        var payment = _payments.FirstOrDefault(p => p.IdPayment == paymentId);
+        if (payment != null)
+        {
+            _payments.Remove(payment);
+            Console.WriteLine($"Payment {payment.IdPayment} removed from Order {IdOrder}.");
+        }
+    }
+
     public decimal CalculateTotal()
     {
         return OrderDishes.Sum(orderDish => orderDish.TotalPrice);  
@@ -101,6 +131,7 @@ public class Order : SerializableObject<Order>
 
     public override string ToString()
     {
-        return $"Order(ID: {IdOrder}, TimeStamp: {TimeStamp}, Total Amount: {TotalAmount:C})";
+        return $"Order(ID: {IdOrder}, TimeStamp: {TimeStamp}, Total Amount: {TotalAmount:C}, Payments: {_payments.Count})";
     }
+
 }
