@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ConsoleApp1.Interfaces;
 using ConsoleApp1.Services;
-
+//Test
 namespace ConsoleApp1.Models
 {
     public class Chef : SerializableObject<Chef>, ICuisineSpecialist, IKitchenManager
