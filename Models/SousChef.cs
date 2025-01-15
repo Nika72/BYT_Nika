@@ -39,7 +39,7 @@ namespace ConsoleApp1.Models
         }
         
 
-        //OVERRIDES
+
         public bool Equals(SousChef other)
         {
             if (other == null) return false;

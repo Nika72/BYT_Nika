@@ -14,13 +14,15 @@ namespace ConsoleApp1.Models
         public int Quantity { get; set; }
         public decimal UnitPrice => Dish.Price;
         public decimal TotalPrice => Quantity * UnitPrice;
+        public int DishId => Dish.IdDish;
 
         public OrderDish(){}
         public OrderDish(Dish dish, int quantity)
         {
             Dish = dish ?? throw new ArgumentNullException(nameof(dish), "Dish cannot be null.");
-            Quantity = quantity <= 0 ? throw new ArgumentException("Quantity must be greater than zero.") : quantity;
+            Quantity = quantity > 0 ? quantity : throw new ArgumentException("Quantity must be greater than zero.");
         }
+
 
         
         //METHODS

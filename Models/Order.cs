@@ -14,12 +14,13 @@ public class Order : SerializableObject<Order>
     
     public decimal TotalAmount => CalculateTotal();  
     
-    public List<OrderDish> OrderDishes { get; private set; } = new List<OrderDish>();
+    private readonly Dictionary<int, OrderDish> _orderDishes = new(); // Qualified Association
+    public IReadOnlyDictionary<int, OrderDish> OrderDishes => _orderDishes;
     public Customer Customer { get; private set; }  
     
     private Payment _payment; 
 
-    public int TotalItems => OrderDishes.Sum(orderDish => orderDish.Quantity);  
+    public int TotalItems => OrderDishes.Values.Sum(orderDish => orderDish.Quantity);
     
     private readonly List<Payment> _payments = new List<Payment>();
     public IReadOnlyList<Payment> Payments => _payments.AsReadOnly();
@@ -36,23 +37,36 @@ public class Order : SerializableObject<Order>
     public void AddItem(Dish dish, int quantity)
     {
         if (dish == null)
-        {
             throw new ArgumentNullException(nameof(dish), "Dish cannot be null.");
-        }
-        
-        var existingOrderDish = OrderDishes.FirstOrDefault(od => od.Dish.Equals(dish) && od.Quantity == quantity);
-        
-        if (existingOrderDish != null)
+        if (quantity <= 0)
+            throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
+
+        if (_orderDishes.ContainsKey(dish.IdDish))
         {
-            Console.WriteLine($"Dish '{dish.Name}' with quantity {quantity} is already added to Order {IdOrder}.");
+            // Update quantity if Dish already exists
+            _orderDishes[dish.IdDish].Quantity += quantity;
+            Console.WriteLine($"Updated quantity for Dish '{dish.Name}' in Order {IdOrder}.");
         }
         else
         {
-            var orderDish = new OrderDish(dish, quantity);  
-            OrderDishes.Add(orderDish);  
-            Console.WriteLine($"Dish '{dish.Name}' (Quantity: {quantity}) added to Order {IdOrder}. Current total: {TotalAmount:C}");
+            // Add new OrderDish entry
+            var orderDish = new OrderDish(dish, quantity);
+            _orderDishes[dish.IdDish] = orderDish;
+            Console.WriteLine($"Dish '{dish.Name}' (Quantity: {quantity}) added to Order {IdOrder}.");
         }
     }
+    public void RemoveItem(int dishId)
+    {
+        if (_orderDishes.Remove(dishId))
+        {
+            Console.WriteLine($"Dish with ID {dishId} removed from Order {IdOrder}.");
+        }
+        else
+        {
+            Console.WriteLine($"Dish with ID {dishId} not found in Order {IdOrder}.");
+        }
+    }
+
     public void AddPayment(decimal amount, PaymentMethod method)
     {
         if (amount <= 0) throw new ArgumentException("Amount must be greater than zero.", nameof(amount));
@@ -81,8 +95,9 @@ public class Order : SerializableObject<Order>
 
     public decimal CalculateTotal()
     {
-        return OrderDishes.Sum(orderDish => orderDish.TotalPrice);  
+        return OrderDishes.Values.Sum(orderDish => orderDish.TotalPrice);
     }
+
     public Payment Payment 
     {
         get => _payment;

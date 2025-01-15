@@ -113,13 +113,15 @@ namespace ConsoleApp1.Models
             if (obj is not Dish other)
                 return false;
 
-            return IdDish == other.IdDish && Name == other.Name;
+            return IdDish == other.IdDish;
         }
+
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(IdDish, Name);
+            return IdDish.GetHashCode();
         }
+
 
         public override string ToString()
         {

@@ -45,7 +45,7 @@ namespace ConsoleApp1.Models
         }
         
         
-        //OVERRIDES
+      
         public override bool Equals(object? obj)
         {
             if (obj is Waiter other)

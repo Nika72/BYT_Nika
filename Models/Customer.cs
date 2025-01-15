@@ -9,14 +9,26 @@ namespace ConsoleApp1.Models
         [Required(ErrorMessage = "Customer ID is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Customer ID must be a positive integer.")]
         public int IdCustomer { get; set; }
+        
 
         private readonly List<Order> _orders = new();
         public IReadOnlyList<Order> Orders => _orders.AsReadOnly();
+        public string car{ get; set; }
         
         
         private readonly Dictionary<int, Reservation> _reservations = new(); 
         public IReadOnlyDictionary<int, Reservation> Reservations => _reservations; 
 
+        public Customer(int idCustomer, string Car)
+        {
+            IdCustomer = idCustomer;
+            car = Car;
+        }
+
+        public Customer()
+        {
+            
+        }
         
         public void AddOrder(Order order)
         {

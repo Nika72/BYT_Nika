@@ -18,6 +18,16 @@ namespace ConsoleApp1.Models
 
         private readonly List<Dish> _dishes = new List<Dish>();
         public IReadOnlyList<Dish> Dishes => _dishes.AsReadOnly();
+        public Restaurant Restaurant { get; private set; }
+
+        public void SetRestaurant(Restaurant restaurant)
+        {
+            Restaurant = restaurant;
+            Console.WriteLine(restaurant == null
+                ? $"Menu '{Name}' is no longer associated with any restaurant."
+                : $"Menu '{Name}' is now associated with restaurant '{restaurant.Name}'.");
+        }
+
 
         public Menu() { }
 

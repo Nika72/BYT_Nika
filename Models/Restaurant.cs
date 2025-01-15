@@ -12,6 +12,9 @@ namespace ConsoleApp1.Models
         
         private int _maxCapacity;
         
+        private readonly List<Menu> _menus = new List<Menu>(); 
+        public IReadOnlyList<Menu> Menus => _menus.AsReadOnly();
+
         [Range(1, int.MaxValue, ErrorMessage = "Max capacity must be a positive integer.")]
         public int MaxCapacity
         {
@@ -61,6 +64,30 @@ namespace ConsoleApp1.Models
             return false;
         }
         
+        public void AddMenu(Menu menu)
+        {
+            if (menu == null) throw new ArgumentNullException(nameof(menu), "Menu cannot be null.");
+            if (_menus.Contains(menu)) return;
+
+            _menus.Add(menu);
+            menu.SetRestaurant(this); // Reverse connection
+            Console.WriteLine($"Menu '{menu.Name}' added to restaurant '{Name}'.");
+        }
+        public bool RemoveMenu(string menuName)
+        {
+            var menu = _menus.Find(m => m.Name == menuName);
+            if (menu != null)
+            {
+                _menus.Remove(menu);
+                menu.SetRestaurant(null); // Clear reverse connection
+                Console.WriteLine($"Menu '{menu.Name}' removed from restaurant '{Name}'.");
+                return true;
+            }
+
+            Console.WriteLine($"Menu '{menuName}' not found in restaurant '{Name}'.");
+            return false;
+        }
+
         
         //OVERRIDES
         public override bool Equals(object? obj)
