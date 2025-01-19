@@ -21,7 +21,6 @@ namespace ConsoleApp1.Models
             Level = level;
         }
 
-        
         //METHODS
         public bool AssignTableToWaiter(Waiter waiter, Table table)
         {
@@ -62,5 +61,24 @@ namespace ConsoleApp1.Models
         {
             return $"Manager(IdManager={IdManager}, Level={Level})";
         }
+
+        // Reflexive association block
+        private Manager _supervisor;
+        private readonly List<Manager> _subordinates = new();
+
+        public Manager Supervisor
+        {
+            get => _supervisor;
+            set
+            {
+                if (_supervisor == value) return;
+
+                _supervisor?._subordinates.Remove(this);
+                _supervisor = value;
+                _supervisor?._subordinates.Add(this);
+            }
+        }
+
+        public IReadOnlyList<Manager> Subordinates => _subordinates.AsReadOnly();
     }
 }
