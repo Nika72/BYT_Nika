@@ -43,7 +43,7 @@ namespace ConsoleApp1.Models
             return true;
         }
         
-        //OVERRIDES
+        
         public override bool Equals(object obj)
         {
             if (obj is not Manager other)
@@ -62,7 +62,7 @@ namespace ConsoleApp1.Models
             return $"Manager(IdManager={IdManager}, Level={Level})";
         }
 
-        // Reflexive association block
+        // Reflexive association 
         private Manager _supervisor;
         private readonly List<Manager> _subordinates = new();
 

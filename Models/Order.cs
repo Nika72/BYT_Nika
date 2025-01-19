@@ -34,6 +34,7 @@ public class Order : SerializableObject<Order>
         Customer?.AddOrder(this);
     }
     
+    //qualified association Customer and Order
     public void AddItem(Dish dish, int quantity)
     {
         if (dish == null)
@@ -43,13 +44,12 @@ public class Order : SerializableObject<Order>
 
         if (_orderDishes.ContainsKey(dish.IdDish))
         {
-            // Update quantity if Dish already exists
             _orderDishes[dish.IdDish].Quantity += quantity;
             Console.WriteLine($"Updated quantity for Dish '{dish.Name}' in Order {IdOrder}.");
         }
         else
         {
-            // Add new OrderDish entry
+            
             var orderDish = new OrderDish(dish, quantity);
             _orderDishes[dish.IdDish] = orderDish;
             Console.WriteLine($"Dish '{dish.Name}' (Quantity: {quantity}) added to Order {IdOrder}.");
@@ -127,7 +127,7 @@ public class Order : SerializableObject<Order>
             Console.WriteLine($"Payment {oldPayment.IdPayment} removed from Order {IdOrder}.");
         }
     }
-    // OVERRIDES 
+    
     public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType())

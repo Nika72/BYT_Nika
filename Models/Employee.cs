@@ -19,11 +19,12 @@ namespace ConsoleApp1.Models {
         [Required(ErrorMessage = "Department is required.")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Department must be between 2 and 100 characters.")]
         public string Department { get; set; }
-
+        
+        //ref
         private Employee _supervisor; 
         private readonly List<Employee> _subordinates = new(); 
 
-        
+        //reflexive
         public Employee Supervisor
         {
             get => _supervisor;
@@ -45,8 +46,7 @@ namespace ConsoleApp1.Models {
             DateTime endDate = DateOfLeaving ?? DateTime.Now;
             return (endDate - DateOfHiring).Days;
         }
-        
-        //OVERRIDES
+    
         public override bool Equals(object obj)
         {
             if (obj is not Employee other)
@@ -59,6 +59,8 @@ namespace ConsoleApp1.Models {
         {
             return HashCode.Combine(IdEmployee, DateOfHiring);
         }
+        
+        //reflexive association 
         public void SetSupervisor(Employee supervisor)
         {
             Supervisor = supervisor;

@@ -138,7 +138,7 @@ namespace ConsoleApp1.Models
                 return false;
             }
         }
-
+        //qualified association Customer and Order
         public void AddReservation(Reservation reservation) 
         {
             if (reservation == null) throw new ArgumentNullException(nameof(reservation), "Reservation cannot be null.");

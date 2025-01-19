@@ -37,7 +37,7 @@ namespace ConsoleApp1.Models
             MenuType = menuType;
         }
 
-        // METHODS
+       
         public void ChangeMenu(string? newName = null, string? newMenuType = null)
         {
             if (!string.IsNullOrEmpty(newName)) Name = newName;
@@ -90,7 +90,7 @@ namespace ConsoleApp1.Models
             return false;
         }
 
-        // OVERRIDES
+      
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType()) return false;

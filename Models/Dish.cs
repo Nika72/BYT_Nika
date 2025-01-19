@@ -37,7 +37,8 @@ namespace ConsoleApp1.Models
         public Menu Menu { get; private set; }
 
         public Dish() { }
-
+        
+        //reverse
         public void SetMenu(Menu menu)
         {
             Menu = menu;
@@ -46,7 +47,7 @@ namespace ConsoleApp1.Models
                 : $"Dish '{Name}' (ID: {IdDish}) is now part of menu '{menu.Name}'.");
         }
 
-        // METHODS
+        
         public static Dish CreateDish(int idDish, string name, string cuisine, bool isVegetarian, bool isVegan,
             decimal price, List<string> ingredients)
         {
@@ -107,7 +108,7 @@ namespace ConsoleApp1.Models
             Ingredients.Add(ingredient);
         }
 
-        // OVERRIDES
+     
         public override bool Equals(object obj)
         {
             if (obj is not Dish other)

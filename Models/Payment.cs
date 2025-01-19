@@ -33,7 +33,7 @@ namespace ConsoleApp1.Models
         }
 
         
-        //METHODS
+        
         public bool ProcessPayment(bool useCredits = false)
         {
             if (Status != PaymentStatus.Pending)
@@ -89,7 +89,7 @@ namespace ConsoleApp1.Models
             }
         }
         
-        //OVERRIDES
+       
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
