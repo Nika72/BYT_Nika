@@ -21,7 +21,7 @@ namespace ConsoleApp1.Models
         [Required(ErrorMessage = "Payment status is required.")]
         public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
         
-        public Order _order { get; internal set; } 
+        public Order _order { get; internal set; } //
 
         public Payment() { }
         

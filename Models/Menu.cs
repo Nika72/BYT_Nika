@@ -66,7 +66,7 @@ namespace ConsoleApp1.Models
             if (dish != null)
             {
                 _dishes.Remove(dish);
-                dish.SetMenu(null); // Clear reverse connection
+                dish.SetMenu(null); 
                 Console.WriteLine($"Dish '{dish.Name}' removed from the menu '{Name}'.");
                 return true;
             }
@@ -75,7 +75,7 @@ namespace ConsoleApp1.Models
             return false;
         }
 
-        // Modify Dish
+       
         public bool ModifyDish(int dishId, string newName, decimal newPrice)
         {
             var dish = _dishes.Find(d => d.IdDish == dishId);

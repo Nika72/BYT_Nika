@@ -11,29 +11,34 @@ namespace ConsoleApp1.Models
         [Range(1, int.MaxValue, ErrorMessage = "NonMember ID must be a positive integer.")]
         public int Id { get; set; }
 
-        
         //METHODS
+
         public Member BeMember(int idMember, int initialCreditPoints = 0, string? email = null)
         {
+            
             Member newMember = new Member(idMember, initialCreditPoints)
             {
                 Email = email
             };
-            
+
             Member.AddInstance(newMember);
 
             Console.WriteLine($"NonMember {Id} has become a Member with ID {idMember}.");
-            
             return newMember;
         }
+
+    
+        public void SuggestMembership()
+        {
+            Console.WriteLine($"NonMember {Id}, consider becoming a Member to enjoy exclusive benefits.");
+        }
         
-        
-        //OVERRIDES
+
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
                 return false;
-    
+
             var other = (NonMember)obj;
             return Id == other.Id;
         }

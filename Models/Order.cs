@@ -14,7 +14,7 @@ public class Order : SerializableObject<Order>
     
     public decimal TotalAmount => CalculateTotal();  
     
-    private readonly Dictionary<int, OrderDish> _orderDishes = new(); // Qualified Association
+    private readonly Dictionary<int, OrderDish> _orderDishes = new(); 
     public IReadOnlyDictionary<int, OrderDish> OrderDishes => _orderDishes;
     public Customer Customer { get; private set; }  
     

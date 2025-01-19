@@ -52,15 +52,20 @@ namespace ConsoleApp1.Models
             Console.WriteLine($"Order {order.IdOrder} placed by Member {IdMember}. Credit points increased to {CreditPoints}.");
             return order;
         }
+        public void AddCredits(int points)
+        {
+            if (points <= 0)
+                throw new ArgumentException("Points to add must be greater than zero.", nameof(points));
+
+            CreditPoints += points;
+            Console.WriteLine($"{points} credit points added. Total points: {CreditPoints}.");
+        }
 
         public bool UseCredits(int pointsToUse)
         {
             if (pointsToUse <= 0)
-            {
-                Console.WriteLine("Points to use must be greater than zero.");
-                return false;
-            }
-            
+                throw new ArgumentException("Points to use must be greater than zero.", nameof(pointsToUse));
+
             if (pointsToUse > CreditPoints)
             {
                 Console.WriteLine($"Insufficient credit points. Available: {CreditPoints}, Requested: {pointsToUse}");
@@ -68,9 +73,10 @@ namespace ConsoleApp1.Models
             }
 
             CreditPoints -= pointsToUse;
-            Console.WriteLine($"{pointsToUse} credit points used. Remaining points: {CreditPoints}");
+            Console.WriteLine($"{pointsToUse} credit points used. Remaining points: {CreditPoints}.");
             return true;
         }
+
         
         //OVERRIDES
         public override bool Equals(object? obj)

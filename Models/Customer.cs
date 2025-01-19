@@ -14,15 +14,17 @@ namespace ConsoleApp1.Models
         private readonly List<Order> _orders = new();
         public IReadOnlyList<Order> Orders => _orders.AsReadOnly();
         public string car{ get; set; }
-        
+        public object CurrentRole { get; private set; } // Dynamic role: Member or NonMember
         
         private readonly Dictionary<int, Reservation> _reservations = new(); 
         public IReadOnlyDictionary<int, Reservation> Reservations => _reservations; 
 
-        public Customer(int idCustomer, string Car)
+        public Customer(int idCustomer, string Car, object initialRole)
         {
             IdCustomer = idCustomer;
+            
             car = Car;
+            SwitchRole(initialRole);
         }
 
         public Customer()
@@ -30,6 +32,7 @@ namespace ConsoleApp1.Models
             
         }
         
+
         public void AddOrder(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
@@ -39,6 +42,20 @@ namespace ConsoleApp1.Models
                 order.SetCustomer(this);
             }
         }
+        
+        public void SwitchRole(object newRole)
+        {
+            if (newRole is Member || newRole is NonMember)
+            {
+                CurrentRole = newRole;
+                Console.WriteLine($"Customer {IdCustomer} switched to role: {newRole.GetType().Name}.");
+            }
+            else
+            {
+                throw new ArgumentException("Invalid role type. Must be Member or NonMember.", nameof(newRole));
+            }
+        }
+
 
         public void RemoveOrder(Order order)
         {
@@ -57,6 +74,20 @@ namespace ConsoleApp1.Models
                 throw new ArgumentException("At least one dish must be ordered.");
             }
 
+            if (CurrentRole is Member member)
+            {
+                Console.WriteLine($"Member {IdCustomer} placing an order with rewards.");
+                member.PlaceOrder(dishes); 
+            }
+            else if (CurrentRole is NonMember)
+            {
+                Console.WriteLine($"NonMember {IdCustomer} placing an order without rewards.");
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown role. Cannot place order.");
+            }
+
             Order order = new Order { IdOrder = Order.Instances.Count + 1 };
             foreach (var dish in dishes)
             {
@@ -70,11 +101,18 @@ namespace ConsoleApp1.Models
             return order;
         }
 
+
         public bool MakePayment(Order order, PaymentMethod paymentMethod)
         {
             if (order == null)
             {
                 throw new ArgumentNullException(nameof(order), "Order cannot be null.");
+            }
+
+            if (CurrentRole is Member member && member.CreditPoints > 0)
+            {
+                Console.WriteLine($"Member {IdCustomer} used credits for payment.");
+                member.UseCredits((int)order.CalculateTotal() / 10);
             }
 
             decimal amount = order.CalculateTotal();
@@ -100,7 +138,7 @@ namespace ConsoleApp1.Models
                 return false;
             }
         }
-        
+
         public void AddReservation(Reservation reservation) 
         {
             if (reservation == null) throw new ArgumentNullException(nameof(reservation), "Reservation cannot be null.");
@@ -144,6 +182,7 @@ namespace ConsoleApp1.Models
         public override string ToString()
         {
             return $"Customer(IdCustomer={IdCustomer})";
+            
         }
     }
 }
